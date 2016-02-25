@@ -1,4 +1,4 @@
-name := """orig"""
+name := """search-engine"""
 
 version := "1.0-SNAPSHOT"
 
