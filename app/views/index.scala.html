@@ -1,9 +1,45 @@
 @main("ICS Search Engine") {
 
   <div class="starter-template">
-    <h1>Bootstrap starter template</h1>
-    <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+    <h1>ICS Search Engine</h1>
+    <p class="lead">A search engine for ics.uci.edu</p>
+
+    <input id="query-bar" type="text" size="60">
   </div>
 
+  <div id="search-results"></div>
+
+  <script id="search-results-template" type="text/template">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%- totalDocuments %> Results (<%- searchTime %> sec)</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+          <% _.each(topResults, function (webPage) { %>
+          <li><a href="<%- webPage.url %>"><%- webPage.title %></a></li>
+          <% }); %>
+        </ul>
+      </div>
+    </div>
+  </script>
+
+  <script src="@routes.Assets.versioned("/javascripts/politeKeyup.jquery.js")"></script>
+  <script type="text/javascript">
+    jQuery(function ($) {
+      $('#query-bar').politeKeyup(500, function () {
+        var query = $("#query-bar").val();
+
+        if (query.length < 3) {
+            return;
+        }
+
+        $.getJSON("/search", { query: query }, function (response) {
+          var template = _.template($("#search-results-template").html());
+          $("#search-results").html(template(response));
+        });
+      }).focus();
+    });
+  </script>
 }
 
