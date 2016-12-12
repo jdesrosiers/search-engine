@@ -7,18 +7,25 @@ import search.QueryEngine
 
 class Application extends Controller {
 
+  implicit val searchInformationWrites = new Writes[QueryEngine.SearchInformation] {
+    def writes(searchInformation: QueryEngine.SearchInformation) = Json.obj(
+        "searchTime" -> searchInformation.searchTime,
+        "totalResults" -> searchInformation.totalResults
+      )
+  }
+
   implicit val webPageWrites = new Writes[QueryEngine.WebPage] {
     def writes(webPage: QueryEngine.WebPage) = Json.obj(
-        "url" -> webPage.url,
-        "title" -> webPage.title
+        "link" -> webPage.link,
+        "title" -> webPage.title,
+        "score" -> webPage.score
       )
   }
 
   implicit val searchResultsWrites = new Writes[QueryEngine.SearchResults] {
     def writes(searchResults: QueryEngine.SearchResults) = Json.obj(
-        "totalDocuments" -> searchResults.totalDocuments,
-        "searchTime" -> searchResults.searchTime,
-        "topResults" -> searchResults.topResults
+        "searchInformation" -> searchResults.searchInformation,
+        "items" -> searchResults.items
       )
   }
 
